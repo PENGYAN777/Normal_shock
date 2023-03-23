@@ -36,67 +36,32 @@ Pc =  CP.CoolProp.PropsSI("pcrit",fluidname)
 print("critical pressure[Pa]:", Pc)
 dc = CP.CoolProp.PropsSI('Dmass','P',Pc,'T',Tc,fluidname) 
 
-Zt = np.arange(0.70, 0.95, 0.02).tolist()
-r_m = np.zeros(len(Zt)) # M2/M1
-r_p = np.zeros(len(Zt)) # P2/P1
-r_t = np.zeros(len(Zt)) # T2/T1
-r_d = np.zeros(len(Zt)) # D2/D1
-r_pt = np.zeros(len(Zt)) # PT2/PT1
-r_y = np.zeros(len(Zt)) # shock losee
+Z1 = np.arange(0.50, 0.95, 0.02).tolist()
+r_m = np.zeros(len(Z1)) # M2/M1
+r_p = np.zeros(len(Z1)) # P2/P1
+r_t = np.zeros(len(Z1)) # T2/T1
+r_d = np.zeros(len(Z1)) # D2/D1
+r_pt = np.zeros(len(Z1)) # PT2/PT1
+r_y = np.zeros(len(Z1)) # shock losee
+Diff = np.zeros(len(Z1)) # shock losee
 
-for j in range(0,len(Zt),1):
+M1 = 1.5
+for j in range(0,len(Z1),1):
     """
-    1. total conditions
-    """
-    
-    print("--------------------Total conditions ------------------")
-    tt = 550 # total pressure
-    zt = Zt[j]
-    pt, gt = PGfromZT(zt,tt)
-    s = CP.CoolProp.PropsSI('Smass','P',pt,'T',tt,fluidname) 
-    ht = CP.CoolProp.PropsSI('Hmass','P',pt,'T',tt,fluidname) 
-    
-    """
-    1.1. compute isentropic relationship
+    1. pre-shock conditions
     """
     
-    p = np.linspace(pt*0.1,pt,1000) #
-    p = pd.Series(p)
-    h = np.zeros(p.size) # enthalpy
-    u = np.zeros(p.size) # velocity
-    c = np.zeros(p.size) # sound speed
-    m = np.zeros(p.size) # Mach number
-    d = np.zeros(p.size) # density
-    t = np.zeros(p.size) # temperature
-    for i in p.index:
-        if abs(p[i]-Pc)<0.01*Pc:
-            p[i] = 0.99*Pc
-        d[i] = CP.CoolProp.PropsSI('Dmass','P',p[i],'Smass',s,fluidname) 
-        t[i] = CP.CoolProp.PropsSI('T','P',p[i],'Smass',s,fluidname) 
-        h[i] = CP.CoolProp.PropsSI('Hmass','P',p[i],'Smass',s,fluidname) 
-        # h[i] = CP.CoolProp.PropsSI('Hmass','T',t[i],'P',p[i],fluidname)
-        u[i] = math.sqrt(abs(2*(ht-h[i])))
-        # c[i] = CP.CoolProp.PropsSI('A','P',p[i],'T',t[i],fluidname) 
-        c[i] = CP.CoolProp.PropsSI('A','P',p[i],'Smass',s,fluidname) 
-        m[i] = u[i]/c[i]
-    
-    """
-    1.2. find pre-shock condition, M1
-    """
-    # print("--------------------Pre-shock states ------------------")
-    M1 = 1.5
-    # print('M1: ',M1)
-    # print("index for required condition:",np.argmin(abs(m-M1)))
-    d1 = d[np.argmin(abs(m-M1))]
-    T1 = t[np.argmin(abs(m-M1))]
-    P1 = p[np.argmin(abs(m-M1))]
-    # c1 = c[np.argmin(abs(m-M1))]
-    u1 = u[np.argmin(abs(m-M1))]
-    # h1 = h[np.argmin(abs(m-M1))]
-    # print('P1[Pa]: ',P1)
-    # print('T1[Pa]: ',T1)
-    
-    
+    print("--------------------pre-shock conditions ------------------")
+    T1 = 530 # total pressure
+    z1 = Z1[j]
+    P1, g1 = PGfromZT(z1,T1)
+    d1 = CP.CoolProp.PropsSI('Dmass','P',P1,'T',T1,fluidname) 
+    s = CP.CoolProp.PropsSI('Smass','P',P1,'T',T1,fluidname) 
+    h1 = CP.CoolProp.PropsSI('Hmass','P',P1,'T',T1,fluidname) 
+    c1 = CP.CoolProp.PropsSI('A','P',P1,'T',T1,fluidname) 
+    u1 = c1*M1
+    ht = h1 + 0.5*u1*u1
+    Pt1 = CP.CoolProp.PropsSI('P','Smass',s,'Hmass',ht,fluidname) 
     """
     2. input pre-shock conditions
     """ 
@@ -105,7 +70,7 @@ for j in range(0,len(Zt),1):
     3. compute post-shock properites
     """
     # print("--------------------Post-shock states ------------------")
-    p2 = np.linspace(P1*1.1,P1*3 ,1000) # post-shock pressure 
+    p2 = np.linspace(P1*1.1,P1*(1.8 + 0.05*j) ,1000) # post-shock pressure 
     p2 = pd.Series(p2)
     u2 = np.zeros(p2.size) 
     d2 = np.zeros(p2.size) 
@@ -130,7 +95,8 @@ for j in range(0,len(Zt),1):
     h2 = CP.CoolProp.PropsSI('Hmass','P',P2,'Dmass',D2,fluidname)
     ht2 = h2 + 0.5*U2*U2
     # print("ht2:", htotal2)
-    print("(ht2-ht1)/ht1(%):", (ht2-ht)/ht*100)
+    # print("(ht2-ht1)/ht1(%):", (ht2-ht)/ht*100)
+    Diff[j] = (ht2-ht)/ht*100
     # print("M2:", M2)
     # print("P2/P1:", P2/P1)
     # print("T2/T1:", T2/T1)
@@ -141,8 +107,8 @@ for j in range(0,len(Zt),1):
     r_p[j] = P2/P1
     r_t[j] = T2/T1
     r_d[j] = D2/d1
-    r_pt[j] = Pt2/pt
-    r_y[j] = (pt-Pt2)/(pt-P1)*100
+    r_pt[j] = Pt2/Pt1
+    r_y[j] = (Pt1-Pt2)/(Pt1-P1)*100
     # Tt2 = CP.CoolProp.PropsSI('T','Smass',s2,'Hmass',ht2,fluidname) 
     # Y = (pt-Pt2)/(pt-P1)*100
 
@@ -150,10 +116,10 @@ for j in range(0,len(Zt),1):
 4. write into csv file
 """   
 
-pd.DataFrame(Zt).to_csv('data.csv', index_label = "Index", header  = ['Zt']) 
+pd.DataFrame(Z1).to_csv('data.csv', index_label = "Index", header  = ['Z1']) 
 data = pd.read_csv("data.csv", ",")
 # append new columns
-D =pd.DataFrame({'P2/P1': r_p, 'T2/T1': r_t, 'D2/D1': r_d,'M2/M1': r_m, 'Pt2/Pt1': r_pt,'Y': r_y,})
+D =pd.DataFrame({'P2/P1': r_p, 'T2/T1': r_t, 'D2/D1': r_d,'M2/M1': r_m, 'Pt2/Pt1': r_pt,'Y': r_y, 'diff': Diff, })
 newData = pd.concat([data, D], join = 'outer', axis = 1)
 # save newData in csv file
 # newData.to_csv("m4sh.csv")
