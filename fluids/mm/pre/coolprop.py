@@ -36,7 +36,7 @@ Pc =  CP.CoolProp.PropsSI("pcrit",fluidname)
 print("critical pressure[Pa]:", Pc)
 dc = CP.CoolProp.PropsSI('Dmass','P',Pc,'T',Tc,fluidname) 
 
-Z1 = np.arange(0.50, 0.95, 0.02).tolist()
+Z1 = np.arange(0.50, 0.98, 0.02).tolist()
 r_m = np.zeros(len(Z1)) # M2/M1
 r_p = np.zeros(len(Z1)) # P2/P1
 r_t = np.zeros(len(Z1)) # T2/T1
@@ -44,6 +44,8 @@ r_d = np.zeros(len(Z1)) # D2/D1
 r_pt = np.zeros(len(Z1)) # PT2/PT1
 r_y = np.zeros(len(Z1)) # shock losee
 Diff = np.zeros(len(Z1)) # shock losee
+pfs= np.zeros(len(Z1)) # freestram pressure
+tfs= np.zeros(len(Z1)) # freestram temperature
 
 M1 = 1.5
 for j in range(0,len(Z1),1):
@@ -52,7 +54,7 @@ for j in range(0,len(Z1),1):
     """
     
     print("--------------------pre-shock conditions ------------------")
-    T1 = 530 # total pressure
+    T1 = 540 # total pressure
     z1 = Z1[j]
     P1, g1 = PGfromZT(z1,T1)
     d1 = CP.CoolProp.PropsSI('Dmass','P',P1,'T',T1,fluidname) 
@@ -109,6 +111,8 @@ for j in range(0,len(Z1),1):
     r_d[j] = D2/d1
     r_pt[j] = Pt2/Pt1
     r_y[j] = (Pt1-Pt2)/(Pt1-P1)*100
+    pfs[j] = P1
+    tfs[j] = T1
     # Tt2 = CP.CoolProp.PropsSI('T','Smass',s2,'Hmass',ht2,fluidname) 
     # Y = (pt-Pt2)/(pt-P1)*100
 
@@ -119,7 +123,8 @@ for j in range(0,len(Z1),1):
 pd.DataFrame(Z1).to_csv('data.csv', index_label = "Index", header  = ['Z1']) 
 data = pd.read_csv("data.csv", ",")
 # append new columns
-D =pd.DataFrame({'P2/P1': r_p, 'T2/T1': r_t, 'D2/D1': r_d,'M2/M1': r_m, 'Pt2/Pt1': r_pt,'Y': r_y, 'diff': Diff, })
+D =pd.DataFrame({'P2/P1': r_p, 'T2/T1': r_t, 'D2/D1': r_d,'M2/M1': r_m, 'Pt2/Pt1': r_pt,'Y': r_y, 
+                 'diff': Diff, 'P1': pfs, 'T1': tfs, })
 newData = pd.concat([data, D], join = 'outer', axis = 1)
 # save newData in csv file
 # newData.to_csv("m4sh.csv")
