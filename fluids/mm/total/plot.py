@@ -93,4 +93,4 @@ axes.set_ylabel('Y(%)',fontsize=12)
 axes.set_title('Y(%)',fontsize=14)
 axes.legend(loc=0 , prop={'size': 10}) # 
 axes.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-fig5.savefig("files/nicfd_mm_ry.eps")
+fig6.savefig("files/nicfd_mm_ry.eps")

@@ -94,7 +94,7 @@ for k in range(0,len(Z1),1):
         P2 = p2[np.argmin(abs(diff))]
         D2 = d2[np.argmin(abs(diff))]    
         T2 = CP.CoolProp.PropsSI('T','P',P2,'Dmass',D2,fluidname) 
-        c2 = CP.CoolProp.PropsSI('A','P|gas',P2,'T',T2,fluidname) 
+        c2 = CP.CoolProp.PropsSI('A','P',P2,'T|gas',T2,fluidname) 
         U2 = u2[np.argmin(abs(diff))]    
         M2 = U2/c2
         h2 = CP.CoolProp.PropsSI('Hmass','P',P2,'Dmass',D2,fluidname)
