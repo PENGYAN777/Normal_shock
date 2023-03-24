@@ -15,7 +15,6 @@ import CoolProp as CP
 import matplotlib.pyplot as plt
 import scipy.interpolate
 
-data = pd.read_csv("data.csv", ",", skiprows=0)
 # give fluid name
 fluidname = "MM"
 
@@ -72,12 +71,13 @@ plt.axhline(pc, dashes = [2, 2])
 """
 test points
 """
-
-nc = 10
+Z1 = np.arange(0.5, 0.92, 0.05).tolist()
+nc = len(Z1)
 colors = plt.cm.tab20(np.linspace(0, 1, nc))
-
-
-plt.plot(data.iloc[:,-1],data.iloc[:,-2],'ro', lw = lw)
+for k in range(0,len(Z1),1):
+    data = 'data' + str(k) + '.csv'
+    z = pd.read_csv(data, ",", skiprows=0)
+    plt.plot(z.iloc[:,-2],z.iloc[:,2],'o', color=colors[k],  lw = lw)
 
 
 
