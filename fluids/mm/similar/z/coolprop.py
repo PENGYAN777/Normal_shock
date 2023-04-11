@@ -88,7 +88,8 @@ for k in range(0,len(Z1),1):
             if u2[i]>0:
                 d2[i] =  d1*u1/u2[i]
                 diff[i] = ht - 0.5*u2[i]*u2[i] - CP.CoolProp.PropsSI('Hmass','P',p2[i],'Dmass',d2[i],fluidname) 
-                if abs(diff[i])<1e-4:
+                if abs(diff[i])<1:
+                    print('diff is:', diff[i])
                     break
         # print("min index:", np.argmin(abs(diff)))
         P2 = p2[np.argmin(abs(diff))]
