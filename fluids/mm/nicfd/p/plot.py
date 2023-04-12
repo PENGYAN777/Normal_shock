@@ -49,7 +49,7 @@ axes.legend(loc=8 , prop={'size': 10}) #
 axes.set_title('$P_2/P_1$ vs $Z_t$',fontsize=14)
 axes.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
 axes.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-fig1.savefig("files/nicfd_mm_rp.eps")
+fig1.savefig("files/nicfd_t_mm_rp.eps")
 
 fig2 = plt.figure( dpi=300)
 lw = 2
@@ -77,7 +77,7 @@ axes.legend(loc=0 , prop={'size': 10}) #
 axes.set_title('$T_2/T_1$ vs $Z_t$',fontsize=14)
 axes.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
 axes.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-fig2.savefig("files/nicfd_mm_rt.eps")
+fig2.savefig("files/nicfd_t_mm_rt.eps")
 
 fig3 = plt.figure( dpi=300)
 lw = 2
@@ -105,7 +105,7 @@ axes.legend(loc=8 , prop={'size': 10}) #
 axes.set_title('$\\rho_2/\\rho_1$ vs $Z_t$',fontsize=14)
 axes.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
 axes.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-fig3.savefig("files/nicfd_mm_rd.eps")
+fig3.savefig("files/nicfd_t_mm_rd.eps")
 
 fig4 = plt.figure( dpi=300)
 lw = 2
@@ -133,7 +133,7 @@ axes.legend(loc=5 , prop={'size': 10}) #
 axes.set_title('$M_2/M_1$ vs $Z_t$',fontsize=14)
 axes.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
 axes.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-fig4.savefig("files/nicfd_mm_rm.eps")
+fig4.savefig("files/nicfd_t_mm_rm.eps")
 
 fig5 = plt.figure( dpi=300)
 lw = 2
@@ -161,7 +161,7 @@ axes.legend(loc=0 , prop={'size': 10}) #
 axes.set_title('$P_{t2}/P_{t1}$ vs $Z_t$',fontsize=14)
 axes.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
 axes.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-fig5.savefig("files/nicfd_mm_rpt.eps")
+fig5.savefig("files/nicfd_t_mm_rpt.eps")
 
 fig6 = plt.figure( dpi=300)
 lw = 2
@@ -189,7 +189,7 @@ axes.legend(loc=0 , prop={'size': 10}) #
 axes.set_title('Y(%) vs $Z_t$',fontsize=14)
 axes.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
 axes.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-fig6.savefig("files/nicfd_mm_ry.eps")
+fig6.savefig("files/nicfd_t_mm_ry.eps")
 
 
 
