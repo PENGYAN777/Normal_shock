@@ -43,7 +43,7 @@ def TGfromZP(Z,P):
     print("fluid name is:", fluidname)
     print("input pairs Z,P[Pa]:" ,Z , P )
     # compute T for given Z,P
-    Trange = np.linspace(400,Tmax,500)
+    Trange = np.linspace(400,650,500)
     Trange = pd.Series(Trange)
     Z_error = np.zeros(Trange.size)
     for i in Trange.index:

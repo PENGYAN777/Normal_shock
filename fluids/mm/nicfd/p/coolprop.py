@@ -36,7 +36,7 @@ Pc =  CP.CoolProp.PropsSI("pcrit",fluidname)
 print("critical pressure[Pa]:", Pc)
 dc = CP.CoolProp.PropsSI('Dmass','P',Pc,'T',Tc,fluidname) 
 
-Z1 = np.arange(0.50, 0.98, 0.05).tolist()
+Z1 = np.arange(0.50, 0.82, 0.05).tolist()
 r_m = np.zeros(len(Z1)) # M2/M1
 r_p = np.zeros(len(Z1)) # P2/P1
 r_t = np.zeros(len(Z1)) # T2/T1
@@ -47,18 +47,17 @@ Diff = np.zeros(len(Z1)) # tolerance
 pfs= np.zeros(len(Z1)) # freestram pressure
 tfs= np.zeros(len(Z1)) # freestram temperature
 
-T1_list = np.arange(540, 580, 10).tolist()
+P1_list = np.arange(1.1*Pc, 1.5*Pc, 0.1*Pc).tolist()
 M1 = 1.5
-for k in range(0,len(T1_list),1):
+for k in range(0,len(P1_list),1):
+    print("--------------------P1/Pc------------------",P1_list[k]/Pc)
     for j in range(0,len(Z1),1):
         """
         1. pre-shock conditions
         """
-        
-        print("--------------------pre-shock conditions ------------------")
-        T1 = T1_list[k] # total pressure
+        P1 = P1_list[k] # total pressure
         z1 = Z1[j]
-        P1, g1 = PGfromZT(z1,T1)
+        T1, g1 = TGfromZP(z1,P1)
         d1 = CP.CoolProp.PropsSI('Dmass','P',P1,'T',T1,fluidname) 
         s = CP.CoolProp.PropsSI('Smass','P',P1,'T',T1,fluidname) 
         h1 = CP.CoolProp.PropsSI('Hmass','P',P1,'T',T1,fluidname) 
@@ -74,7 +73,7 @@ for k in range(0,len(T1_list),1):
         3. compute post-shock properites
         """
         # print("--------------------Post-shock states ------------------")
-        p2 = np.linspace(P1*1.1,P1*(1.8 + 0.05*j*5/2), 1000) # post-shock pressure 
+        p2 = np.linspace(P1*1.1,P1*(1.8 + 0.1*j), 1000) # post-shock pressure 
         p2 = pd.Series(p2)
         u2 = np.zeros(p2.size) 
         d2 = np.zeros(p2.size) 
