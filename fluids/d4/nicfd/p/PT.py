@@ -23,6 +23,7 @@ fluidname = "D4"
 fluid = CP.AbstractState("HEOS", fluidname)
 
 pc = fluid.keyed_output(CP.iP_critical)
+Pc=pc
 Tc = fluid.keyed_output(CP.iT_critical)
 Tmin =  CP.CoolProp.PropsSI("Ttriple",fluidname)
 Tmax =  CP.CoolProp.PropsSI("Tmax",fluidname)
@@ -73,13 +74,13 @@ plt.axhline(pc, dashes = [2, 2])
 """
 test points
 """
-# T1_list = np.arange(610, 650, 10).tolist()
-# nc = len(T1_list)
-# colors = plt.cm.tab20(np.linspace(0, 1, nc))
-# for k in range(0,len(T1_list),1):
-#     data = 'data' + str(k) + '.csv'
-#     z = pd.read_csv(data, ",", skiprows=0)
-#     plt.plot(z.iloc[:,-1],z.iloc[:,-2],'o', color=colors[k],  lw = lw)
+P1_list = np.arange(Pc*1.1, Pc*1.5, Pc*0.1).tolist()
+nc = len(P1_list)
+colors = plt.cm.tab20(np.linspace(0, 1, nc))
+for k in range(0,len(P1_list),1):
+    data = 'data' + str(k) + '.csv'
+    z = pd.read_csv(data, ",", skiprows=0)
+    plt.plot(z.iloc[:,-1],z.iloc[:,-2],'o', color=colors[k],  lw = lw)
 
 
 

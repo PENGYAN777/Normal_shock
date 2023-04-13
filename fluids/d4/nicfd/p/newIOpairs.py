@@ -43,7 +43,7 @@ def TGfromZP(Z,P):
     print("fluid name is:", fluidname)
     print("input pairs Z,P[Pa]:" ,Z , P )
     # compute T for given Z,P
-    Trange = np.linspace(400,Tmax,500)
+    Trange = np.linspace(400,800,500)
     Trange = pd.Series(Trange)
     Z_error = np.zeros(Trange.size)
     for i in Trange.index:
@@ -82,7 +82,7 @@ def PTfromZG(Z,Gamma):
     #print("fluid name is:", fluidname)
     #print("input pairs Z,Gamma:" ,Z , Gamma )
     # compute P,T for given Z,Gamma
-    Trange = np.linspace(400,Tmax,100)
+    Trange = np.linspace(400,800,100)
     Trange = pd.Series(Trange)
     Prange = np.zeros(100)
     Gammat = np.zeros(100)
@@ -118,7 +118,7 @@ def ZTfromPG(P,Gamma):
     print("fluid name is:", fluidname)
     print("input pairs P,Gamma:" ,P , Gamma )
     # compute P for given t,Gamma
-    Trange = np.linspace(400,Tmax,500)
+    Trange = np.linspace(400,800,500)
     Trange = pd.Series(Trange)
     G_error = np.zeros(Trange.size)
     for i in Trange.index:
